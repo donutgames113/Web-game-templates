@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            font-family: Arial, sans-serif;
+            position: relative; /* Added for positioning */
+        }
+
+        #score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .clickButton {
+            cursor: pointer;
+            margin: 10px;
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .upgradeButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #upgradeCount {
+            margin-top: 10px;
+        }
+
+        /* Added styles for template text */
+        #templateText {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: gray;
+        }
+
+        #moreTemplates {
+            position: absolute;
+            bottom: 30px;
+            right: 10px;
+            font-size: 12px;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clicker Game</h1>
+    <p id="score">Score: <span id="scoreValue">0</span></p>
+
+    <img src="ClickerButton.png" alt="Clicker Button" class="clickButton" onclick="incrementScore()">
+
+    <div>
+        <button class="upgradeButton" onclick="buyUpgrade()">Buy Click Upgrade (Cost: <span id="clickUpgradeCost">10</span>)</button>
+        <button class="upgradeButton" onclick="buyAutoClickUpgrade()">Buy Auto Clicker (Cost: <span id="autoClickUpgradeCost">50</span>)</button>
+        <!-- Add more upgrade buttons here -->
+        <p id="upgradeCount">Click Upgrades: <span id="clickUpgrades">0</span> | Auto Clickers: <span id="autoClickers">0</span></p>
+    </div>
+
+    <div id="templateText">Template by Donut</div>
+    <div id="moreTemplates" onclick="openGitHub()">More Templates</div>
+
+    <script>
+        let score = 0;
+        let clickValue = 1; // Initial click value
+        let upgradeCost = 10;
+        let autoClickers = 0;
+        let autoClickerCost = 50;
+
+        function incrementScore() {
+            score += clickValue;
+            document.getElementById('scoreValue').innerText = score;
+        }
+
+        function buyUpgrade() {
+            if (score >= upgradeCost) {
+                score -= upgradeCost;
+                clickValue++;
+                upgradeCost *= 2; // Increase the cost for the next upgrade
+                document.getElementById('scoreValue').innerText = score;
+                document.getElementById('clickUpgradeCost').innerText = upgradeCost;
+                document.getElementById('clickUpgrades').innerText = clickValue - 1;
+            } else {
+                alert("Not enough clicks to buy the upgrade!");
+            }
+        }
+
+        function buyAutoClickUpgrade() {
+            if (score >= autoClickerCost) {
+                score -= autoClickerCost;
+                autoClickers++;
+                autoClickerCost *= 2; // Increase the cost for the next auto clicker
+                document.getElementById('scoreValue').innerText = score;
+                document.getElementById('autoClickUpgradeCost').innerText = autoClickerCost;
+                document.getElementById('autoClickers').innerText = autoClickers;
+                // Start auto-clicking
+                setInterval(function () {
+                    score += autoClickers;
+                    document.getElementById('scoreValue').innerText = score;
+                }, 1000);
+            } else {
+                alert("Not enough clicks to buy the auto clicker!");
+            }
+        }
+
+        function openGitHub() {
+            window.location.href = "https://github.com/donutgames113/Web-game-templates";
+        }
+    </script>
+</body>
+</html>
