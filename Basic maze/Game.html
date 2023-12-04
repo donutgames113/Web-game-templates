@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #maze {
+      display: grid;
+      grid-template-columns: repeat(10, 40px);
+      grid-template-rows: repeat(10, 40px);
+      gap: 2px;
+      background-color: #eee;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      box-sizing: border-box;
+    }
+
+    #start {
+      background-color: #00f;
+    }
+
+    #goal {
+      background-color: #0f0;
+    }
+
+    #player {
+      background-color: #f00;
+    }
+
+    .obstacle {
+      background-color: #333;
+    }
+  </style>
+  <title>Maze Solver Game</title>
+</head>
+<body>
+  <div id="maze"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const mazeContainer = document.getElementById('maze');
+
+      const rows = 10;
+      const columns = 10;
+      const obstaclesPercentage = 0.2; // Adjust the percentage of cells with obstacles
+
+      // Function to generate a random maze
+      function generateMaze() {
+        mazeContainer.innerHTML = '';
+
+        for (let i = 0; i < rows * columns; i++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+
+          if (Math.random() < obstaclesPercentage) {
+            cell.classList.add('obstacle');
+          }
+
+          mazeContainer.appendChild(cell);
+        }
+
+        // Add start and goal cells in the same row and column
+        const startCell = document.querySelector('.cell');
+        const goalCell = document.querySelector('.cell:last-child');
+
+        startCell.id = 'start';
+        goalCell.id = 'goal';
+      }
+
+      // Initialize the maze
+      generateMaze();
+
+      // Initialize player position
+      let playerPosition = 0;
+      const playerCell = document.querySelector('.cell');
+      playerCell.id = 'player';
+
+      // Event listener for WASD key navigation
+      document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+          case 'w':
+            movePlayer(-columns);
+            break;
+          case 's':
+            movePlayer(columns);
+            break;
+          case 'a':
+            movePlayer(-1);
+            break;
+          case 'd':
+            movePlayer(1);
+            break;
+        }
+      });
+
+      // Function to move the player
+      function movePlayer(offset) {
+        const newPlayerPosition = playerPosition + offset;
+        const newPlayerCell = mazeContainer.children[newPlayerPosition];
+
+        if (newPlayerCell && !newPlayerCell.classList.contains('obstacle')) {
+          playerCell.removeAttribute('id');
+          newPlayerCell.id = 'player';
+          playerPosition = newPlayerPosition;
+
+          // Check if the player reached the goal
+          if (playerPosition === rows * columns - 1) {
+            alert('Congratulations! You reached the goal.');
+            generateMaze();
+            playerPosition = 0;
+            playerCell.id = 'player';
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
